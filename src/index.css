@@ -109,6 +109,98 @@ body {
   gap: 2rem;
 }
 
+/* Mode Toggle Card */
+.mode-toggle-card {
+  background-color: #ffffff;
+  border: 1px solid var(--bank-border);
+  border-radius: 1rem;
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.mode-toggle-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .mode-toggle-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  background-color: #f8fafc;
+  color: var(--bank-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.mode-btn-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--bank-navy);
+}
+
+.mode-btn-sub {
+  font-size: 0.775rem;
+  color: var(--bank-text-muted);
+}
+
+.mode-btn-active-savings {
+  background-color: #eff6ff;
+  border-color: var(--bank-blue-600);
+  color: var(--bank-blue-700);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+}
+
+.mode-btn-active-savings .mode-btn-title {
+  color: var(--bank-blue-700);
+}
+
+.mode-btn-active-expenses {
+  background-color: #fff7ed;
+  border-color: #f97316;
+  color: #c2410c;
+  box-shadow: 0 2px 4px rgba(249, 115, 22, 0.1);
+}
+
+.mode-btn-active-expenses .mode-btn-title {
+  color: #c2410c;
+}
+
+/* Expenses Specific Modifications */
+.input-card-expenses {
+  border-left: 4px solid #f97316;
+}
+
+.expense-notice {
+  background-color: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 0.75rem 1rem;
+  border-radius: 0.6rem;
+}
+
+.card-expense-20y { border-top: 4px solid #f97316; }
+.card-expense-30y { border-top: 4px solid #ea580c; }
+.card-expense-50y { border-top: 4px solid #dc2626; }
+
+.expense-footer-pill {
+  background-color: #fff7ed;
+  border: 1px solid #ffedd5;
+}
+
 /* Calculator Input Card */
 .input-card {
   background-color: #ffffff;

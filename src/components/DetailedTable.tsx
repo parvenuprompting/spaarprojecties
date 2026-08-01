@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { Table } from 'lucide-react';
-import type { AllProjectionsResult, Frequency, TimeframeId } from '../types/savings';
+import type { AllProjectionsResult, Frequency, TimeframeId, CalculatorMode } from '../types/savings';
 import { FREQUENCIES, TIMEFRAMES, formatCurrency } from '../utils/savingsCalculator';
 
 interface DetailedTableProps {
   projections: AllProjectionsResult;
   selectedFrequency: Frequency;
   onSelectFrequency: (freq: Frequency) => void;
+  mode: CalculatorMode;
 }
 
 export const DetailedTable: React.FC<DetailedTableProps> = ({
   projections,
   selectedFrequency,
   onSelectFrequency,
+  mode,
 }) => {
   const [activeTab, setActiveTab] = useState<'totalValue' | 'interest' | 'deposit'>('totalValue');
+  const isSavings = mode === 'savings';
 
   return (
     <section className="table-section">
@@ -29,30 +32,32 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
           </p>
         </div>
 
-        {/* View switcher tabs */}
-        <div className="table-tab-group">
-          <button
-            type="button"
-            onClick={() => setActiveTab('totalValue')}
-            className={`table-tab ${activeTab === 'totalValue' ? 'table-tab-active' : ''}`}
-          >
-            Totale Waarde
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('interest')}
-            className={`table-tab ${activeTab === 'interest' ? 'table-tab-active' : ''}`}
-          >
-            Alleen Rente (Winst)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('deposit')}
-            className={`table-tab ${activeTab === 'deposit' ? 'table-tab-active' : ''}`}
-          >
-            Totale Inleg
-          </button>
-        </div>
+        {/* View switcher tabs - only show interest tab in savings mode */}
+        {isSavings && (
+          <div className="table-tab-group">
+            <button
+              type="button"
+              onClick={() => setActiveTab('totalValue')}
+              className={`table-tab ${activeTab === 'totalValue' ? 'table-tab-active' : ''}`}
+            >
+              Totale Waarde
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('interest')}
+              className={`table-tab ${activeTab === 'interest' ? 'table-tab-active' : ''}`}
+            >
+              Alleen Rente (Winst)
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('deposit')}
+              className={`table-tab ${activeTab === 'deposit' ? 'table-tab-active' : ''}`}
+            >
+              Totale Inleg
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="table-wrapper">
@@ -95,8 +100,10 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
                     const isSelectedFreq = selectedFrequency === freq.id;
 
                     let displayValue = data.totalValue;
-                    if (activeTab === 'interest') displayValue = data.totalInterest;
-                    if (activeTab === 'deposit') displayValue = data.totalDeposit;
+                    if (isSavings) {
+                      if (activeTab === 'interest') displayValue = data.totalInterest;
+                      if (activeTab === 'deposit') displayValue = data.totalDeposit;
+                    }
 
                     return (
                       <td
@@ -106,12 +113,12 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
                         <div className="cell-content">
                           <span
                             className={`cell-main ${
-                              activeTab === 'interest' ? 'text-emerald-600 font-semibold' : ''
-                            } ${isHighlightYear && activeTab === 'totalValue' ? 'text-blue-700 font-bold' : ''}`}
+                              isSavings && activeTab === 'interest' ? 'text-emerald-600 font-semibold' : ''
+                            } ${isHighlightYear ? 'font-bold text-slate-900' : ''}`}
                           >
                             {formatCurrency(displayValue)}
                           </span>
-                          {activeTab === 'totalValue' && data.totalInterest > 0 && (
+                          {isSavings && activeTab === 'totalValue' && data.totalInterest > 0 && (
                             <span className="cell-sub text-emerald-600">
                               +{formatCurrency(data.totalInterest)} rente
                             </span>

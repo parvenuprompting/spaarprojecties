@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeftRight, CheckCircle2 } from 'lucide-react';
-import type { AllProjectionsResult, Frequency } from '../types/savings';
+import type { AllProjectionsResult, Frequency, CalculatorMode } from '../types/savings';
 import { FREQUENCIES, formatCurrency } from '../utils/savingsCalculator';
 
 interface FrequencyComparisonProps {
@@ -8,6 +8,7 @@ interface FrequencyComparisonProps {
   amount: number;
   selectedFrequency: Frequency;
   onSelectFrequency: (freq: Frequency) => void;
+  mode: CalculatorMode;
 }
 
 export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
@@ -15,8 +16,10 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
   amount,
   selectedFrequency,
   onSelectFrequency,
+  mode,
 }) => {
-  // Compute annual equivalent deposit for fair comparison
+  const isSavings = mode === 'savings';
+
   const getAnnualEquivalent = (freq: Frequency): number => {
     const config = FREQUENCIES.find((f) => f.id === freq)!;
     return amount * config.periodsPerYear;
@@ -30,7 +33,9 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
           Vergelijking tussen Frequenties
         </h2>
         <p className="section-subtitle">
-          Zie direct het resultaat over 10 en 30 jaar afhankelijk van hoe vaak je spaart
+          {isSavings
+            ? 'Zie direct het resultaat over 10 en 30 jaar afhankelijk van hoe vaak je spaart'
+            : 'Zie wat je over 10 en 30 jaar uitgeeft bij verschillende betalingsfrequenties'}
         </p>
       </div>
 
@@ -59,7 +64,7 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
               </div>
 
               <div className="annual-badge">
-                <span>Jaarlijkse inleg: </span>
+                <span>{isSavings ? 'Jaarlijkse inleg:' : 'Jaarlijkse kosten:'} </span>
                 <strong>{formatCurrency(annualCost)}</strong>
               </div>
 
@@ -67,17 +72,21 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
                 <div className="comp-stat-box">
                   <span className="stat-label">Na 10 Jaar</span>
                   <span className="stat-val">{formatCurrency(p10.totalValue)}</span>
-                  <span className="stat-sub text-emerald-600">
-                    +{formatCurrency(p10.totalInterest)} rente
-                  </span>
+                  {isSavings && (
+                    <span className="stat-sub text-emerald-600">
+                      +{formatCurrency(p10.totalInterest)} rente
+                    </span>
+                  )}
                 </div>
 
                 <div className="comp-stat-box">
                   <span className="stat-label">Na 30 Jaar</span>
                   <span className="stat-val text-blue-700">{formatCurrency(p30.totalValue)}</span>
-                  <span className="stat-sub text-emerald-600">
-                    +{formatCurrency(p30.totalInterest)} rente
-                  </span>
+                  {isSavings && (
+                    <span className="stat-sub text-emerald-600">
+                      +{formatCurrency(p30.totalInterest)} rente
+                    </span>
+                  )}
                 </div>
               </div>
 

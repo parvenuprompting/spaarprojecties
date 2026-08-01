@@ -7,6 +7,7 @@ import type {
   FrequencyProjection,
   GrowthChartPoint,
   AllProjectionsResult,
+  CalculatorMode,
 } from '../types/savings';
 
 export const FREQUENCIES: FrequencyOption[] = [
@@ -31,26 +32,16 @@ export const TIMEFRAMES: TimeframeOption[] = [
   { id: '50y', label: '50 jaar', years: 50 },
 ];
 
-/**
- * Calculates compound interest for periodic deposits.
- * Standard financial compounding: Monthly compounding.
- * 
- * Formula for monthly compounding:
- * Monthly rate = (1 + annualRate)^(1/12) - 1  (or annualRate / 12 for nominal)
- * Standard in banking: r_monthly = annualRate / 12.
- * 
- * For each month (m = 1..totalMonths):
- * 1. Add deposits that occurred during month m.
- * 2. Apply monthly interest (balance * r_monthly).
- */
 export function calculateProjection(
   amount: number,
   frequency: Frequency,
   years: number,
-  annualInterestRatePct: number
+  annualInterestRatePct: number,
+  mode: CalculatorMode = 'savings'
 ): ProjectionDetail {
   const cleanAmount = Math.max(0, isNaN(amount) ? 0 : amount);
-  const cleanRate = Math.max(0, isNaN(annualInterestRatePct) ? 0 : annualInterestRatePct);
+  // In expenses mode, interest is strictly 0%
+  const cleanRate = mode === 'expenses' ? 0 : Math.max(0, isNaN(annualInterestRatePct) ? 0 : annualInterestRatePct);
   
   const freqConfig = FREQUENCIES.find((f) => f.id === frequency)!;
   const periodsPerYear = freqConfig.periodsPerYear;
@@ -60,7 +51,7 @@ export function calculateProjection(
 
   if (cleanRate === 0) {
     return {
-      timeframeId: '50y', // fallback placeholder, caller assigns exact timeframeId
+      timeframeId: '50y',
       label: '',
       years,
       totalDeposit: Math.round(totalDeposit * 100) / 100,
@@ -73,13 +64,9 @@ export function calculateProjection(
   const totalMonths = Math.max(1, Math.round(years * 12));
 
   let currentBalance = 0;
-  
-  // Calculate simulation month by month for exact precision matching monthly compounding standard
-  // Number of deposits per month
   const depositsPerMonth = periodsPerYear / 12;
 
   if (years < 1 / 12) {
-    // Less than 1 month (e.g. 1 week)
     const depositCount = Math.max(1, Math.round(years * periodsPerYear));
     const deposit = cleanAmount * depositCount;
     return {
@@ -93,9 +80,7 @@ export function calculateProjection(
   }
 
   for (let m = 1; m <= totalMonths; m++) {
-    // Add deposits for this month
     currentBalance += cleanAmount * depositsPerMonth;
-    // Apply monthly interest
     currentBalance += currentBalance * monthlyRate;
   }
 
@@ -115,15 +100,17 @@ export function calculateProjection(
 
 export function calculateAllProjections(
   amount: number,
-  annualInterestRatePct: number
+  annualInterestRatePct: number,
+  mode: CalculatorMode = 'savings'
 ): AllProjectionsResult {
   const byFrequency = {} as Record<Frequency, FrequencyProjection>;
+  const effectiveRate = mode === 'expenses' ? 0 : annualInterestRatePct;
 
   FREQUENCIES.forEach((freq) => {
     const projections = {} as Record<TimeframeId, ProjectionDetail>;
 
     TIMEFRAMES.forEach((tf) => {
-      const proj = calculateProjection(amount, freq.id, tf.years, annualInterestRatePct);
+      const proj = calculateProjection(amount, freq.id, tf.years, effectiveRate, mode);
       proj.timeframeId = tf.id;
       proj.label = tf.label;
       projections[tf.id] = proj;
@@ -137,7 +124,6 @@ export function calculateAllProjections(
     };
   });
 
-  // Generate timeline chart points for 0 to 50 years
   const chartData: GrowthChartPoint[] = [];
   const keyYears = [0, 1, 2, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
@@ -153,10 +139,10 @@ export function calculateAllProjections(
         valueYearly: 0,
       });
     } else {
-      const pWeekly = calculateProjection(amount, 'weekly', year, annualInterestRatePct);
-      const pMonthly = calculateProjection(amount, 'monthly', year, annualInterestRatePct);
-      const pQuarterly = calculateProjection(amount, 'quarterly', year, annualInterestRatePct);
-      const pYearly = calculateProjection(amount, 'yearly', year, annualInterestRatePct);
+      const pWeekly = calculateProjection(amount, 'weekly', year, effectiveRate, mode);
+      const pMonthly = calculateProjection(amount, 'monthly', year, effectiveRate, mode);
+      const pQuarterly = calculateProjection(amount, 'quarterly', year, effectiveRate, mode);
+      const pYearly = calculateProjection(amount, 'yearly', year, effectiveRate, mode);
 
       chartData.push({
         year,
@@ -172,7 +158,8 @@ export function calculateAllProjections(
 
   return {
     amount,
-    annualInterestRate: annualInterestRatePct,
+    annualInterestRate: effectiveRate,
+    mode,
     byFrequency,
     chartData,
   };

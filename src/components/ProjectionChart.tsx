@@ -10,23 +10,24 @@ import {
   Legend,
 } from 'recharts';
 import { LineChart, Layers, Eye } from 'lucide-react';
-import type { AllProjectionsResult, Frequency } from '../types/savings';
+import type { AllProjectionsResult, Frequency, CalculatorMode } from '../types/savings';
 import { FREQUENCIES, formatCurrency } from '../utils/savingsCalculator';
 
 interface ProjectionChartProps {
   projections: AllProjectionsResult;
   selectedFrequency: Frequency;
+  mode: CalculatorMode;
 }
 
 export const ProjectionChart: React.FC<ProjectionChartProps> = ({
   projections,
   selectedFrequency,
+  mode,
 }) => {
   const [showAllFrequencies, setShowAllFrequencies] = useState(false);
-
+  const isSavings = mode === 'savings';
   const currentFreqConfig = FREQUENCIES.find((f) => f.id === selectedFrequency)!;
 
-  // Custom tooltips with Dutch formatting
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -74,10 +75,12 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
         <div>
           <h2 className="section-title">
             <LineChart className="w-5 h-5 text-blue-600" />
-            Vermogensgroei over Tijd (0 tot 50 Jaar)
+            {isSavings ? 'Vermogensgroei over Tijd (0 tot 50 Jaar)' : 'Cumulatieve Kostenontwikkeling (0 tot 50 Jaar)'}
           </h2>
           <p className="section-subtitle">
-            Visualisatie van je totale inleg versus opgebouwde samengestelde rente ({currentFreqConfig.label})
+            {isSavings
+              ? `Visualisatie van je totale inleg versus opgebouwde samengestelde rente (${currentFreqConfig.label})`
+              : `Visualisatie van je opgebouwde uitgaven over tijd (${currentFreqConfig.label})`}
           </p>
         </div>
 
@@ -89,7 +92,7 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
           {showAllFrequencies ? (
             <>
               <Layers className="w-4 h-4 text-blue-600" />
-              <span>Toon Inleg vs Rente (Focus)</span>
+              <span>{isSavings ? 'Toon Inleg vs Rente (Focus)' : 'Toon Totale Kosten (Focus)'}</span>
             </>
           ) : (
             <>
@@ -126,7 +129,7 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
               <Area
                 type="monotone"
                 dataKey="weekly"
-                name="Wekelijks Sparen"
+                name={isSavings ? 'Wekelijks Sparen' : 'Wekelijkse Uitgave'}
                 stroke="#2563eb"
                 fillOpacity={1}
                 fill="url(#gradWeekly)"
@@ -135,7 +138,7 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
               <Area
                 type="monotone"
                 dataKey="monthly"
-                name="Maandelijks Sparen"
+                name={isSavings ? 'Maandelijks Sparen' : 'Maandelijkse Uitgave'}
                 stroke="#10b981"
                 fillOpacity={1}
                 fill="url(#gradMonthly)"
@@ -144,7 +147,7 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
               <Area
                 type="monotone"
                 dataKey="yearly"
-                name="Jaarlijks Sparen"
+                name={isSavings ? 'Jaarlijks Sparen' : 'Jaarlijkse Uitgave'}
                 stroke="#f59e0b"
                 fillOpacity={0.2}
                 fill="#f59e0b"
@@ -155,8 +158,8 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
             <AreaChart data={chartPoints} margin={{ top: 10, right: 30, left: 10, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorDeposit" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#94a3b8" stopOpacity={0.2} />
+                  <stop offset="5%" stopColor={isSavings ? '#94a3b8' : '#f59e0b'} stopOpacity={0.8} />
+                  <stop offset="95%" stopColor={isSavings ? '#94a3b8' : '#f59e0b'} stopOpacity={0.2} />
                 </linearGradient>
                 <linearGradient id="colorInterest" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#10b981" stopOpacity={0.9} />
@@ -175,21 +178,23 @@ export const ProjectionChart: React.FC<ProjectionChartProps> = ({
               <Area
                 type="monotone"
                 dataKey="deposit"
-                name="Totale Eigen Inleg"
+                name={isSavings ? 'Totale Eigen Inleg' : 'Totale Cumulatieve Uitgaven'}
                 stackId="1"
-                stroke="#64748b"
+                stroke={isSavings ? '#64748b' : '#d97706'}
                 fill="url(#colorDeposit)"
                 strokeWidth={2}
               />
-              <Area
-                type="monotone"
-                dataKey="interest"
-                name="Opgebouwde Rente (Winst)"
-                stackId="1"
-                stroke="#059669"
-                fill="url(#colorInterest)"
-                strokeWidth={2}
-              />
+              {isSavings && (
+                <Area
+                  type="monotone"
+                  dataKey="interest"
+                  name="Opgebouwde Rente (Winst)"
+                  stackId="1"
+                  stroke="#059669"
+                  fill="url(#colorInterest)"
+                  strokeWidth={2}
+                />
+              )}
             </AreaChart>
           )}
         </ResponsiveContainer>

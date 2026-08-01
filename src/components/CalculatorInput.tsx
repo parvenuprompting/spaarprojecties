@@ -1,6 +1,6 @@
 import React from 'react';
-import { Euro, Percent, Sparkles } from 'lucide-react';
-import type { Frequency } from '../types/savings';
+import { Euro, Percent, Sparkles, CreditCard } from 'lucide-react';
+import type { Frequency, CalculatorMode } from '../types/savings';
 import { FREQUENCIES } from '../utils/savingsCalculator';
 
 interface CalculatorInputProps {
@@ -10,9 +10,11 @@ interface CalculatorInputProps {
   onInterestRateChange: (newRate: number) => void;
   selectedFrequency: Frequency;
   onFrequencyChange: (freq: Frequency) => void;
+  mode: CalculatorMode;
 }
 
-const PRESET_AMOUNTS = [10, 25, 50, 100, 250, 500];
+const SAVINGS_PRESETS = [10, 25, 50, 100, 250, 500];
+const EXPENSE_PRESETS = [5, 10, 15, 30, 50, 100]; // Common subscription & recurring costs
 
 export const CalculatorInput: React.FC<CalculatorInputProps> = ({
   amount,
@@ -21,7 +23,11 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
   onInterestRateChange,
   selectedFrequency,
   onFrequencyChange,
+  mode,
 }) => {
+  const isSavings = mode === 'savings';
+  const presets = isSavings ? SAVINGS_PRESETS : EXPENSE_PRESETS;
+
   const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     onAmountChange(isNaN(val) ? 0 : val);
@@ -33,13 +39,20 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
   };
 
   return (
-    <div className="input-card">
+    <div className={`input-card ${!isSavings ? 'input-card-expenses' : ''}`}>
       <div className="input-card-grid">
-        {/* Primary Deposit Input */}
+        {/* Primary Deposit / Expense Input */}
         <div className="input-group full-width-sm">
           <div className="label-with-tooltip">
-            <label htmlFor="savings-amount" className="input-label">
-              Periodiek Spaarbedrag
+            <label htmlFor="savings-amount" className="input-label flex items-center gap-1.5">
+              {isSavings ? (
+                <>Periodiek Spaarbedrag</>
+              ) : (
+                <>
+                  <CreditCard className="w-4 h-4 text-amber-600" />
+                  Periodieke Uitgave / Kosten
+                </>
+              )}
             </label>
             <span className="live-indicator">
               <span className="live-dot"></span>
@@ -58,7 +71,7 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
               step="5"
               value={amount === 0 ? '' : amount}
               onChange={handleAmountInputChange}
-              placeholder="Vul een bedrag in (bijv. 50)"
+              placeholder={isSavings ? 'Bijv. 50 (sparen)' : 'Bijv. 15 (Netflix/Sportschool)'}
               className="currency-input"
               autoFocus
             />
@@ -66,9 +79,9 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
 
           {/* Quick Presets */}
           <div className="preset-container">
-            <span className="preset-label">Snelkiezer:</span>
+            <span className="preset-label">Snelkiezer ({isSavings ? 'Sparen' : 'Kosten'}):</span>
             <div className="preset-buttons">
-              {PRESET_AMOUNTS.map((preset) => (
+              {presets.map((preset) => (
                 <button
                   key={preset}
                   type="button"
@@ -84,7 +97,9 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
 
         {/* Frequency selector */}
         <div className="input-group">
-          <label className="input-label">Inlegfrequentie</label>
+          <label className="input-label">
+            {isSavings ? 'Inlegfrequentie' : 'Betaalfrequentie'}
+          </label>
           <div className="frequency-selector">
             {FREQUENCIES.map((f) => (
               <button
@@ -99,42 +114,50 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
           </div>
         </div>
 
-        {/* Interest rate slider & input */}
-        <div className="input-group col-span-full">
-          <div className="flex-between">
-            <label htmlFor="interest-slider" className="input-label flex items-center gap-1.5">
-              <Percent className="w-4 h-4 text-blue-600" />
-              Verwacht Jaarlijks Rendement / Rente
-            </label>
-            <div className="rate-badge">
-              <span>{interestRate}% per jaar</span>
-              {interestRate === 3 && (
-                <span className="tag-std">
-                  <Sparkles className="w-3 h-3 text-amber-500" /> Standaard
-                </span>
-              )}
+        {/* Interest rate slider - Only in Savings mode */}
+        {isSavings ? (
+          <div className="input-group col-span-full">
+            <div className="flex-between">
+              <label htmlFor="interest-slider" className="input-label flex items-center gap-1.5">
+                <Percent className="w-4 h-4 text-blue-600" />
+                Verwacht Jaarlijks Rendement / Rente
+              </label>
+              <div className="rate-badge">
+                <span>{interestRate}% per jaar</span>
+                {interestRate === 3 && (
+                  <span className="tag-std">
+                    <Sparkles className="w-3 h-3 text-amber-500" /> Standaard
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="slider-wrapper">
-            <input
-              id="interest-slider"
-              type="range"
-              min="0"
-              max="10"
-              step="0.1"
-              value={interestRate}
-              onChange={handleRateInputChange}
-              className="custom-range-slider"
-            />
-            <div className="slider-ticks">
-              <span>0% (Geen rente)</span>
-              <span className="font-semibold text-blue-700">3% (Standaard Bank)</span>
-              <span>5% (Indexfonds)</span>
-              <span>10% (Max)</span>
+            <div className="slider-wrapper">
+              <input
+                id="interest-slider"
+                type="range"
+                min="0"
+                max="10"
+                step="0.1"
+                value={interestRate}
+                onChange={handleRateInputChange}
+                className="custom-range-slider"
+              />
+              <div className="slider-ticks">
+                <span>0% (Geen rente)</span>
+                <span className="font-semibold text-blue-700">3% (Standaard Bank)</span>
+                <span>5% (Indexfonds)</span>
+                <span>10% (Max)</span>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="input-group col-span-full expense-notice">
+            <span className="text-amber-800 text-xs font-medium">
+              💡 <strong>Uitgaven Modus:</strong> In deze modus wordt geen rente berekend (0%). Je ziet puur de cumulatieve totale uitgaven die dit abonnement of deze gewoonte kost over tijd.
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

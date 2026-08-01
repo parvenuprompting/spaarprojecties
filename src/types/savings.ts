@@ -1,4 +1,5 @@
 export type Frequency = 'weekly' | 'monthly' | 'quarterly' | 'yearly';
+export type CalculatorMode = 'savings' | 'expenses';
 
 export interface FrequencyOption {
   id: Frequency;
@@ -56,6 +57,7 @@ export interface GrowthChartPoint {
 export interface AllProjectionsResult {
   amount: number;
   annualInterestRate: number;
+  mode: CalculatorMode;
   byFrequency: Record<Frequency, FrequencyProjection>;
   chartData: GrowthChartPoint[];
 }
