@@ -168,6 +168,7 @@ export const App: React.FC = () => {
               annualInterestRate={interestRate}
               globalFrequency={selectedFrequency}
               onFrequencyChange={setSelectedFrequency}
+              initialDeposit={initialDeposit}
             />
           </div>
 
@@ -178,6 +179,7 @@ export const App: React.FC = () => {
               annualInterestRate={interestRate}
               globalFrequency={selectedFrequency}
               onFrequencyChange={setSelectedFrequency}
+              initialDeposit={initialDeposit}
             />
           </div>
         </main>

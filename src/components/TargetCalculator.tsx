@@ -8,6 +8,7 @@ interface TargetCalculatorProps {
   annualInterestRate: number;
   globalFrequency: Frequency;
   onFrequencyChange: (freq: Frequency) => void;
+  initialDeposit?: number;
 }
 
 export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
@@ -15,6 +16,7 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
   annualInterestRate,
   globalFrequency,
   onFrequencyChange,
+  initialDeposit = 0,
 }) => {
   const [targetAmount, setTargetAmount] = useState<number>(10000);
   const [durationValue, setDurationValue] = useState<number>(5);
@@ -23,10 +25,10 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
   const isSavings = mode === 'savings';
   const yearsEquivalent = durationType === 'years' ? durationValue : durationValue / 12;
 
-  const resultMonthly = calculateRequiredDeposit(targetAmount, 'monthly', yearsEquivalent, annualInterestRate, mode);
-  const resultWeekly = calculateRequiredDeposit(targetAmount, 'weekly', yearsEquivalent, annualInterestRate, mode);
-  const resultQuarterly = calculateRequiredDeposit(targetAmount, 'quarterly', yearsEquivalent, annualInterestRate, mode);
-  const resultYearly = calculateRequiredDeposit(targetAmount, 'yearly', yearsEquivalent, annualInterestRate, mode);
+  const resultMonthly = calculateRequiredDeposit(targetAmount, 'monthly', yearsEquivalent, annualInterestRate, mode, initialDeposit);
+  const resultWeekly = calculateRequiredDeposit(targetAmount, 'weekly', yearsEquivalent, annualInterestRate, mode, initialDeposit);
+  const resultQuarterly = calculateRequiredDeposit(targetAmount, 'quarterly', yearsEquivalent, annualInterestRate, mode, initialDeposit);
+  const resultYearly = calculateRequiredDeposit(targetAmount, 'yearly', yearsEquivalent, annualInterestRate, mode, initialDeposit);
 
   const activeResult = 
     globalFrequency === 'weekly' ? resultWeekly :

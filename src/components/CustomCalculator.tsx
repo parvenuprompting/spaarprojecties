@@ -8,6 +8,7 @@ interface CustomCalculatorProps {
   annualInterestRate: number;
   globalFrequency: Frequency;
   onFrequencyChange: (freq: Frequency) => void;
+  initialDeposit?: number;
 }
 
 export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
@@ -15,6 +16,7 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
   annualInterestRate,
   globalFrequency,
   onFrequencyChange,
+  initialDeposit = 0,
 }) => {
   const [customAmount, setCustomAmount] = useState<number>(100);
   const [customFrequency, setCustomFrequency] = useState<Frequency>(globalFrequency);
@@ -39,7 +41,8 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
     customFrequency,
     yearsEquivalent,
     annualInterestRate,
-    mode
+    mode,
+    initialDeposit
   );
 
   return (
@@ -75,7 +78,12 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
 
         {/* Frequency selector synced with primary frequency */}
         <div className="input-group">
-          <label className="input-label">Periode ( Frequentie )</label>
+          <div className="flex justify-between items-center mb-1">
+            <label className="input-label mb-0">Periode ( Frequentie )</label>
+            <span className={`text-xs font-semibold ${customFrequency === globalFrequency ? 'text-blue-600' : 'text-amber-600'}`}>
+              {customFrequency === globalFrequency ? '✓ Gesynchroniseerd' : '⚙️ Aangepaste override'}
+            </span>
+          </div>
           <select
             value={customFrequency}
             onChange={(e) => handleFrequencySelect(e.target.value as Frequency)}

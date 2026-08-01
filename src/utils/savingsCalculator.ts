@@ -186,13 +186,15 @@ export function calculateRequiredDeposit(
   frequency: Frequency,
   years: number,
   annualInterestRatePct: number,
-  mode: CalculatorMode = 'savings'
+  mode: CalculatorMode = 'savings',
+  initialDeposit: number = 0
 ): {
   requiredDeposit: number;
   totalDeposit: number;
   totalInterest: number;
 } {
   const cleanTarget = Math.max(0, isNaN(targetAmount) ? 0 : targetAmount);
+  const cleanInitial = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit);
   const cleanRate = mode === 'expenses' ? 0 : Math.max(0, isNaN(annualInterestRatePct) ? 0 : annualInterestRatePct);
   
   const freqConfig = FREQUENCIES.find((f) => f.id === frequency)!;
@@ -203,17 +205,28 @@ export function calculateRequiredDeposit(
     return { requiredDeposit: 0, totalDeposit: 0, totalInterest: 0 };
   }
 
-  if (cleanRate === 0 || years < 1 / 12) {
-    const requiredDeposit = cleanTarget / totalPeriods;
-    return {
-      requiredDeposit: Math.round(requiredDeposit * 100) / 100,
-      totalDeposit: cleanTarget,
-      totalInterest: 0,
-    };
-  }
-
   const monthlyRate = cleanRate / 100 / 12;
   const totalMonths = Math.max(1, Math.round(years * 12));
+
+  // Compute future value of the initial deposit over the period
+  let initialFv = cleanInitial;
+  if (cleanRate > 0) {
+    for (let m = 1; m <= totalMonths; m++) {
+      initialFv += initialFv * monthlyRate;
+    }
+  }
+
+  const remainingTarget = Math.max(0, cleanTarget - initialFv);
+
+  if (cleanRate === 0 || years < 1 / 12) {
+    const requiredDeposit = remainingTarget / totalPeriods;
+    const totalDeposit = cleanInitial + requiredDeposit * totalPeriods;
+    return {
+      requiredDeposit: Math.round(requiredDeposit * 100) / 100,
+      totalDeposit: Math.round(totalDeposit * 100) / 100,
+      totalInterest: Math.max(0, Math.round((cleanTarget - totalDeposit) * 100) / 100),
+    };
+  }
 
   let fvUnit = 0;
   for (let m = 1; m <= totalMonths; m++) {
@@ -232,9 +245,9 @@ export function calculateRequiredDeposit(
     fvUnit += fvUnit * monthlyRate;
   }
 
-  const requiredDeposit = cleanTarget / fvUnit;
-  const totalDeposit = requiredDeposit * totalPeriods;
-  const totalInterest = Math.max(0, cleanTarget - totalDeposit);
+  const requiredDeposit = fvUnit > 0 ? remainingTarget / fvUnit : 0;
+  const totalDeposit = cleanInitial + requiredDeposit * totalPeriods;
+  const totalInterest = Math.max(0, Math.round((cleanTarget - totalDeposit) * 100) / 100);
 
   return {
     requiredDeposit: Math.round(requiredDeposit * 100) / 100,
