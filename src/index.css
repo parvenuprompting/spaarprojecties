@@ -1027,3 +1027,139 @@ body {
   color: var(--bank-navy);
 }
 
+/* Target Calculator Section */
+.target-calc-card {
+  background-color: #ffffff;
+  border: 1px solid var(--bank-border);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+.target-calc-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .target-calc-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.target-result-banner {
+  background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+  border: 1px solid #c7d2fe;
+  border-radius: 0.875rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3730a3;
+  background-color: #ffffff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.375rem;
+  border: 1px solid #c7d2fe;
+  margin-bottom: 0.4rem;
+}
+
+.target-big-amount {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #1e1b4b;
+  letter-spacing: -0.02em;
+}
+
+.target-period-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4338ca;
+}
+
+.banner-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.breakdown-pill {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.pill-interest {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.target-freq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .target-freq-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.target-freq-card {
+  background-color: #f8fafc;
+  border: 1px solid var(--bank-border);
+  border-radius: 0.75rem;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.target-freq-card:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.target-freq-card.active {
+  background-color: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.freq-lbl {
+  font-size: 0.775rem;
+  color: var(--bank-text-muted);
+  font-weight: 600;
+}
+
+.freq-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--bank-navy);
+  margin: 0.15rem 0;
+}
+
+.freq-sub {
+  font-size: 0.7rem;
+  color: var(--bank-text-muted);
+}
+
+

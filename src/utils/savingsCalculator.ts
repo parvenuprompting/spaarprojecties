@@ -168,6 +168,61 @@ export function calculateAllProjections(
   };
 }
 
+export function calculateRequiredDeposit(
+  targetAmount: number,
+  frequency: Frequency,
+  years: number,
+  annualInterestRatePct: number,
+  mode: CalculatorMode = 'savings'
+): {
+  requiredDeposit: number;
+  totalDeposit: number;
+  totalInterest: number;
+} {
+  const cleanTarget = Math.max(0, isNaN(targetAmount) ? 0 : targetAmount);
+  const cleanRate = mode === 'expenses' ? 0 : Math.max(0, isNaN(annualInterestRatePct) ? 0 : annualInterestRatePct);
+  
+  const freqConfig = FREQUENCIES.find((f) => f.id === frequency)!;
+  const periodsPerYear = freqConfig.periodsPerYear;
+  const totalPeriods = years * periodsPerYear;
+
+  if (totalPeriods <= 0 || cleanTarget <= 0) {
+    return { requiredDeposit: 0, totalDeposit: 0, totalInterest: 0 };
+  }
+
+  if (cleanRate === 0 || years < 1 / 12) {
+    const requiredDeposit = cleanTarget / totalPeriods;
+    return {
+      requiredDeposit: Math.round(requiredDeposit * 100) / 100,
+      totalDeposit: cleanTarget,
+      totalInterest: 0,
+    };
+  }
+
+  // Monthly compounding factor calculation
+  // Find payment x such that compounding monthly gives targetAmount
+  const monthlyRate = cleanRate / 100 / 12;
+  const totalMonths = Math.max(1, Math.round(years * 12));
+  const depositsPerMonth = periodsPerYear / 12;
+
+  // Let FV_1 be future value when x = 1
+  let fvUnit = 0;
+  for (let m = 1; m <= totalMonths; m++) {
+    fvUnit += 1 * depositsPerMonth;
+    fvUnit += fvUnit * monthlyRate;
+  }
+
+  const requiredDeposit = cleanTarget / fvUnit;
+  const totalDeposit = requiredDeposit * totalPeriods;
+  const totalInterest = Math.max(0, cleanTarget - totalDeposit);
+
+  return {
+    requiredDeposit: Math.round(requiredDeposit * 100) / 100,
+    totalDeposit: Math.round(totalDeposit * 100) / 100,
+    totalInterest: Math.round(totalInterest * 100) / 100,
+  };
+}
+
 export function formatCurrency(val: number): string {
   return new Intl.NumberFormat('nl-NL', {
     style: 'currency',

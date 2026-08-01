@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateProjection, calculateAllProjections } from './savingsCalculator';
+import { calculateProjection, calculateAllProjections, calculateRequiredDeposit } from './savingsCalculator';
 
 describe('Savings Calculator Utility', () => {
   it('calculates zero interest correctly for 1 year monthly savings of €50', () => {
@@ -18,7 +18,6 @@ describe('Savings Calculator Utility', () => {
 
   it('calculates expenses correctly with zero interest regardless of rate input', () => {
     const result = calculateProjection(15, 'monthly', 10, 5, 'expenses');
-    // 15 * 12 * 10 = 1800 total expenses
     expect(result.totalDeposit).toBe(1800);
     expect(result.totalInterest).toBe(0);
     expect(result.totalValue).toBe(1800);
@@ -30,5 +29,18 @@ describe('Savings Calculator Utility', () => {
     expect(all.annualInterestRate).toBe(0);
     expect(all.byFrequency.monthly.projections['50y'].totalValue).toBe(15 * 12 * 50);
     expect(all.chartData.length).toBe(13);
+  });
+
+  it('calculates required deposit for target amount correctly', () => {
+    // €12,000 target over 10 years at 0% interest monthly = €100/month
+    const targetZeroRate = calculateRequiredDeposit(12000, 'monthly', 10, 0, 'savings');
+    expect(targetZeroRate.requiredDeposit).toBe(100);
+    expect(targetZeroRate.totalDeposit).toBe(12000);
+    expect(targetZeroRate.totalInterest).toBe(0);
+
+    // €12,000 target over 10 years at 3% interest monthly -> required monthly deposit should be less than €100
+    const targetWithRate = calculateRequiredDeposit(12000, 'monthly', 10, 3, 'savings');
+    expect(targetWithRate.requiredDeposit).toBeLessThan(100);
+    expect(targetWithRate.totalInterest).toBeGreaterThan(0);
   });
 });

@@ -7,6 +7,7 @@ import { FrequencyComparison } from './components/FrequencyComparison';
 import { ProjectionChart } from './components/ProjectionChart';
 import { DetailedTable } from './components/DetailedTable';
 import { CustomCalculator } from './components/CustomCalculator';
+import { TargetCalculator } from './components/TargetCalculator';
 import type { Frequency, CalculatorMode } from './types/savings';
 import { calculateAllProjections } from './utils/savingsCalculator';
 
@@ -81,6 +82,9 @@ export const App: React.FC = () => {
 
         {/* Step 6: Custom Realtime Calculator */}
         <CustomCalculator mode={mode} annualInterestRate={interestRate} />
+
+        {/* Step 7: Spaardoel Target Calculator */}
+        <TargetCalculator mode={mode} annualInterestRate={interestRate} />
       </main>
     </div>
   );
