@@ -1,7 +1,9 @@
-import React from 'react';
-import { PiggyBank, Sliders, Trophy, ArrowLeftRight, LineChart, Table, Calculator, Target } from 'lucide-react';
+import React, { useState } from 'react';
+import { PiggyBank, Sliders, Trophy, ArrowLeftRight, LineChart, Table, Calculator, Target, Menu, X } from 'lucide-react';
 
 export const Header: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const navItems = [
     { label: 'Invoer & Rente', href: '#invoer', icon: Sliders },
     { label: 'Highlights', href: '#highlights', icon: Trophy },
@@ -27,12 +29,27 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
+        {/* Mobile Hamburger Toggle */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="mobile-menu-toggle"
+          aria-label="Navigatiemenu openen/sluiten"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5 text-slate-700" /> : <Menu className="w-5 h-5 text-slate-700" />}
+        </button>
+
         {/* Navigation Menu */}
-        <nav className="bank-nav-menu">
+        <nav className={`bank-nav-menu ${mobileMenuOpen ? 'nav-menu-mobile-open' : ''}`}>
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
-              <a key={item.href} href={item.href} className="nav-link">
+              <a
+                key={item.href}
+                href={item.href}
+                className="nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Icon className="w-3.5 h-3.5" />
                 <span>{item.label}</span>
               </a>

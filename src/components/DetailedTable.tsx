@@ -68,13 +68,16 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
               {FREQUENCIES.map((f) => (
                 <th
                   key={f.id}
-                  onClick={() => onSelectFrequency(f.id)}
                   className={`th-clickable ${selectedFrequency === f.id ? 'th-selected' : ''}`}
                 >
-                  <div className="flex items-center justify-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => onSelectFrequency(f.id)}
+                    className="w-full h-full flex items-center justify-center gap-1 bg-transparent border-none font-bold text-inherit cursor-pointer p-0"
+                  >
                     <span>{f.label}</span>
                     {selectedFrequency === f.id && <span className="active-dot"></span>}
-                  </div>
+                  </button>
                 </th>
               ))}
             </tr>

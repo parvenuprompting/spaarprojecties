@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calculator, Euro, Calendar } from 'lucide-react';
 import type { Frequency, CalculatorMode } from '../types/savings';
 import { calculateProjection, formatCurrency } from '../utils/savingsCalculator';
@@ -6,19 +6,32 @@ import { calculateProjection, formatCurrency } from '../utils/savingsCalculator'
 interface CustomCalculatorProps {
   mode: CalculatorMode;
   annualInterestRate: number;
+  globalFrequency: Frequency;
+  onFrequencyChange: (freq: Frequency) => void;
 }
 
 export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
   mode,
   annualInterestRate,
+  globalFrequency,
+  onFrequencyChange,
 }) => {
-  const [customAmount, setCustomAmount] = React.useState<number>(100);
-  const [customFrequency, setCustomFrequency] = React.useState<Frequency>('monthly');
-  const [durationValue, setDurationValue] = React.useState<number>(5);
-  const [durationType, setDurationType] = React.useState<'years' | 'months'>('years');
+  const [customAmount, setCustomAmount] = useState<number>(100);
+  const [customFrequency, setCustomFrequency] = useState<Frequency>(globalFrequency);
+  const [durationValue, setDurationValue] = useState<number>(5);
+  const [durationType, setDurationType] = useState<'years' | 'months'>('years');
+
+  // Keep synced with global frequency when user changes primary frequency
+  useEffect(() => {
+    setCustomFrequency(globalFrequency);
+  }, [globalFrequency]);
+
+  const handleFrequencySelect = (freq: Frequency) => {
+    setCustomFrequency(freq);
+    onFrequencyChange(freq);
+  };
 
   const isSavings = mode === 'savings';
-
   const yearsEquivalent = durationType === 'years' ? durationValue : durationValue / 12;
 
   const result = calculateProjection(
@@ -60,12 +73,12 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
           </div>
         </div>
 
-        {/* Frequency selector */}
+        {/* Frequency selector synced with primary frequency */}
         <div className="input-group">
           <label className="input-label">Periode ( Frequentie )</label>
           <select
             value={customFrequency}
-            onChange={(e) => setCustomFrequency(e.target.value as Frequency)}
+            onChange={(e) => handleFrequencySelect(e.target.value as Frequency)}
             className="custom-select-input"
           >
             <option value="weekly">Wekelijks</option>

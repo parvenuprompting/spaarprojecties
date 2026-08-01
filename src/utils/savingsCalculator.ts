@@ -40,17 +40,18 @@ export function calculateProjection(
   frequency: Frequency,
   years: number,
   annualInterestRatePct: number,
-  mode: CalculatorMode = 'savings'
+  mode: CalculatorMode = 'savings',
+  initialDeposit: number = 0
 ): ProjectionDetail {
   const cleanAmount = Math.max(0, isNaN(amount) ? 0 : amount);
-  // In expenses mode, interest is strictly 0%
+  const cleanInitial = Math.max(0, isNaN(initialDeposit) ? 0 : initialDeposit);
   const cleanRate = mode === 'expenses' ? 0 : Math.max(0, isNaN(annualInterestRatePct) ? 0 : annualInterestRatePct);
   
   const freqConfig = FREQUENCIES.find((f) => f.id === frequency)!;
   const periodsPerYear = freqConfig.periodsPerYear;
   
   const totalPeriods = years * periodsPerYear;
-  const totalDeposit = cleanAmount * totalPeriods;
+  const totalDeposit = cleanInitial + cleanAmount * totalPeriods;
 
   if (cleanRate === 0) {
     return {
@@ -67,11 +68,11 @@ export function calculateProjection(
   const monthlyRate = cleanRate / 100 / 12;
   const totalMonths = Math.max(1, Math.round(years * 12));
 
-  let currentBalance = 0;
+  let currentBalance = cleanInitial;
 
   if (years < 1 / 12) {
     const depositCount = Math.max(1, Math.round(years * periodsPerYear));
-    const deposit = cleanAmount * depositCount;
+    const deposit = cleanInitial + cleanAmount * depositCount;
     return {
       timeframeId: '1w',
       label: '',
@@ -91,7 +92,6 @@ export function calculateProjection(
     } else if (frequency === 'yearly') {
       depositsThisMonth = m % 12 === 0 ? 1 : 0;
     } else if (frequency === 'weekly') {
-      // Discrete week deposits falling into month m (summing to 52 per year)
       depositsThisMonth = Math.round(m * (52 / 12)) - Math.round((m - 1) * (52 / 12));
     }
 
@@ -116,7 +116,8 @@ export function calculateProjection(
 export function calculateAllProjections(
   amount: number,
   annualInterestRatePct: number,
-  mode: CalculatorMode = 'savings'
+  mode: CalculatorMode = 'savings',
+  initialDeposit: number = 0
 ): AllProjectionsResult {
   const byFrequency = {} as Record<Frequency, FrequencyProjection>;
   const effectiveRate = mode === 'expenses' ? 0 : annualInterestRatePct;
@@ -125,7 +126,7 @@ export function calculateAllProjections(
     const projections = {} as Record<TimeframeId, ProjectionDetail>;
 
     TIMEFRAMES.forEach((tf) => {
-      const proj = calculateProjection(amount, freq.id, tf.years, effectiveRate, mode);
+      const proj = calculateProjection(amount, freq.id, tf.years, effectiveRate, mode, initialDeposit);
       proj.timeframeId = tf.id;
       proj.label = tf.label;
       projections[tf.id] = proj;
@@ -147,17 +148,17 @@ export function calculateAllProjections(
       chartData.push({
         year: 0,
         label: 'Start',
-        deposit: 0,
-        valueWeekly: 0,
-        valueMonthly: 0,
-        valueQuarterly: 0,
-        valueYearly: 0,
+        deposit: initialDeposit,
+        valueWeekly: initialDeposit,
+        valueMonthly: initialDeposit,
+        valueQuarterly: initialDeposit,
+        valueYearly: initialDeposit,
       });
     } else {
-      const pWeekly = calculateProjection(amount, 'weekly', year, effectiveRate, mode);
-      const pMonthly = calculateProjection(amount, 'monthly', year, effectiveRate, mode);
-      const pQuarterly = calculateProjection(amount, 'quarterly', year, effectiveRate, mode);
-      const pYearly = calculateProjection(amount, 'yearly', year, effectiveRate, mode);
+      const pWeekly = calculateProjection(amount, 'weekly', year, effectiveRate, mode, initialDeposit);
+      const pMonthly = calculateProjection(amount, 'monthly', year, effectiveRate, mode, initialDeposit);
+      const pQuarterly = calculateProjection(amount, 'quarterly', year, effectiveRate, mode, initialDeposit);
+      const pYearly = calculateProjection(amount, 'yearly', year, effectiveRate, mode, initialDeposit);
 
       chartData.push({
         year,

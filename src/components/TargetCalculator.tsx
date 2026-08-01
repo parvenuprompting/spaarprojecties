@@ -6,16 +6,19 @@ import { calculateRequiredDeposit, formatCurrency, formatCurrencyPrecise } from 
 interface TargetCalculatorProps {
   mode: CalculatorMode;
   annualInterestRate: number;
+  globalFrequency: Frequency;
+  onFrequencyChange: (freq: Frequency) => void;
 }
 
 export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
   mode,
   annualInterestRate,
+  globalFrequency,
+  onFrequencyChange,
 }) => {
   const [targetAmount, setTargetAmount] = useState<number>(10000);
   const [durationValue, setDurationValue] = useState<number>(5);
   const [durationType, setDurationType] = useState<'years' | 'months'>('years');
-  const [selectedFrequency, setSelectedFrequency] = useState<Frequency>('monthly');
 
   const isSavings = mode === 'savings';
   const yearsEquivalent = durationType === 'years' ? durationValue : durationValue / 12;
@@ -26,9 +29,9 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
   const resultYearly = calculateRequiredDeposit(targetAmount, 'yearly', yearsEquivalent, annualInterestRate, mode);
 
   const activeResult = 
-    selectedFrequency === 'weekly' ? resultWeekly :
-    selectedFrequency === 'monthly' ? resultMonthly :
-    selectedFrequency === 'quarterly' ? resultQuarterly : resultYearly;
+    globalFrequency === 'weekly' ? resultWeekly :
+    globalFrequency === 'monthly' ? resultMonthly :
+    globalFrequency === 'quarterly' ? resultQuarterly : resultYearly;
 
   return (
     <section className="target-calc-card">
@@ -108,8 +111,8 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
         <div className="input-group">
           <label className="input-label">Inlegfrequentie Focus</label>
           <select
-            value={selectedFrequency}
-            onChange={(e) => setSelectedFrequency(e.target.value as Frequency)}
+            value={globalFrequency}
+            onChange={(e) => onFrequencyChange(e.target.value as Frequency)}
             className="custom-select-input"
           >
             <option value="weekly">Wekelijks Sparen</option>
@@ -130,7 +133,7 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
           <div className="target-big-amount">
             {formatCurrencyPrecise(activeResult.requiredDeposit)}{' '}
             <span className="target-period-label">
-              / {selectedFrequency === 'weekly' ? 'week' : selectedFrequency === 'monthly' ? 'maand' : selectedFrequency === 'quarterly' ? 'kwartaal' : 'jaar'}
+              / {globalFrequency === 'weekly' ? 'week' : globalFrequency === 'monthly' ? 'maand' : globalFrequency === 'quarterly' ? 'kwartaal' : 'jaar'}
             </span>
           </div>
         </div>
@@ -153,29 +156,29 @@ export const TargetCalculator: React.FC<TargetCalculatorProps> = ({
 
       {/* Grid of all frequencies */}
       <div className="target-freq-grid mt-4">
-        <div className={`target-freq-card ${selectedFrequency === 'weekly' ? 'active' : ''}`} onClick={() => setSelectedFrequency('weekly')}>
+        <button type="button" className={`target-freq-card ${globalFrequency === 'weekly' ? 'active' : ''}`} onClick={() => onFrequencyChange('weekly')}>
           <span className="freq-lbl">Wekelijks</span>
           <span className="freq-val">{formatCurrencyPrecise(resultWeekly.requiredDeposit)}</span>
           <span className="freq-sub">per week</span>
-        </div>
+        </button>
 
-        <div className={`target-freq-card ${selectedFrequency === 'monthly' ? 'active' : ''}`} onClick={() => setSelectedFrequency('monthly')}>
+        <button type="button" className={`target-freq-card ${globalFrequency === 'monthly' ? 'active' : ''}`} onClick={() => onFrequencyChange('monthly')}>
           <span className="freq-lbl">Maandelijks</span>
           <span className="freq-val">{formatCurrencyPrecise(resultMonthly.requiredDeposit)}</span>
           <span className="freq-sub">per maand</span>
-        </div>
+        </button>
 
-        <div className={`target-freq-card ${selectedFrequency === 'quarterly' ? 'active' : ''}`} onClick={() => setSelectedFrequency('quarterly')}>
+        <button type="button" className={`target-freq-card ${globalFrequency === 'quarterly' ? 'active' : ''}`} onClick={() => onFrequencyChange('quarterly')}>
           <span className="freq-lbl">Per Kwartaal</span>
           <span className="freq-val">{formatCurrencyPrecise(resultQuarterly.requiredDeposit)}</span>
           <span className="freq-sub">per kwartaal</span>
-        </div>
+        </button>
 
-        <div className={`target-freq-card ${selectedFrequency === 'yearly' ? 'active' : ''}`} onClick={() => setSelectedFrequency('yearly')}>
+        <button type="button" className={`target-freq-card ${globalFrequency === 'yearly' ? 'active' : ''}`} onClick={() => onFrequencyChange('yearly')}>
           <span className="freq-lbl">Jaarlijks</span>
           <span className="freq-val">{formatCurrencyPrecise(resultYearly.requiredDeposit)}</span>
           <span className="freq-sub">per jaar</span>
-        </div>
+        </button>
       </div>
     </section>
   );

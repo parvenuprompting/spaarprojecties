@@ -48,10 +48,11 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
           const annualCost = getAnnualEquivalent(freq.id);
 
           return (
-            <div
+            <button
               key={freq.id}
+              type="button"
               onClick={() => onSelectFrequency(freq.id)}
-              className={`comparison-card ${isSelected ? 'comparison-card-selected' : ''}`}
+              className={`comparison-card text-left ${isSelected ? 'comparison-card-selected' : ''}`}
             >
               <div className="comparison-card-header">
                 <div>
@@ -90,13 +91,12 @@ export const FrequencyComparison: React.FC<FrequencyComparisonProps> = ({
                 </div>
               </div>
 
-              <button
-                type="button"
+              <div
                 className={`select-freq-btn ${isSelected ? 'btn-selected' : ''}`}
               >
                 {isSelected ? 'Geselecteerde Frequentie' : 'Kies deze frequentie'}
-              </button>
-            </div>
+              </div>
+            </button>
           );
         })}
       </div>

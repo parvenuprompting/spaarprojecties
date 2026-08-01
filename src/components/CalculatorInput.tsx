@@ -1,11 +1,13 @@
 import React from 'react';
-import { Euro, Percent, CreditCard } from 'lucide-react';
+import { Euro, Percent, CreditCard, Coins } from 'lucide-react';
 import type { Frequency, CalculatorMode } from '../types/savings';
 import { FREQUENCIES } from '../utils/savingsCalculator';
 
 interface CalculatorInputProps {
   amount: number;
   onAmountChange: (newAmount: number) => void;
+  initialDeposit: number;
+  onInitialDepositChange: (newInitial: number) => void;
   interestRate: number;
   onInterestRateChange: (newRate: number) => void;
   selectedFrequency: Frequency;
@@ -19,6 +21,8 @@ const EXPENSE_PRESETS = [5, 10, 15, 30, 50, 100]; // Common subscription & recur
 export const CalculatorInput: React.FC<CalculatorInputProps> = ({
   amount,
   onAmountChange,
+  initialDeposit,
+  onInitialDepositChange,
   interestRate,
   onInterestRateChange,
   selectedFrequency,
@@ -31,6 +35,11 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
   const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     onAmountChange(isNaN(val) ? 0 : val);
+  };
+
+  const handleInitialDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    onInitialDepositChange(isNaN(val) ? 0 : val);
   };
 
   const handleRateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +103,31 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Eenmalig Startkapitaal (Optioneel) */}
+        {isSavings && (
+          <div className="input-group full-width-sm">
+            <label htmlFor="initial-deposit" className="input-label flex items-center gap-1.5">
+              <Coins className="w-4 h-4 text-amber-500" />
+              Eenmalig Startkapitaal (Optioneel)
+            </label>
+            <div className="currency-input-wrapper">
+              <div className="currency-symbol">
+                <Euro className="w-5 h-5 text-slate-400" />
+              </div>
+              <input
+                id="initial-deposit"
+                type="number"
+                min="0"
+                step="100"
+                value={initialDeposit === 0 ? '' : initialDeposit}
+                onChange={handleInitialDepositChange}
+                placeholder="Bijv. 1000 (huidig spaargeld)"
+                className="currency-input"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Frequency selector */}
         <div className="input-group">
