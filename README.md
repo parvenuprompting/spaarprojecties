@@ -7,23 +7,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/parvenuprompting/spaarprojecties/pulls)
 
-Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente én cumulatieve uitgavenberekening.
+Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente, cumulatieve uitgavenberekening en spaardoelberekeningen.
 
 ![Spaarprojecties Overview](./public/banner.png)
 
 ## 🚀 Kenmerken
 
+- **Sticky Navigatiemenu**: Snel en soepel (smooth scroll) navigeren naar elk onderdeel van de pagina.
 - **Dual Modus (Sparen vs. Uitgaven)**:
   - 💰 **Sparen & Investeren**: Met maandelijks samengestelde rente (rendement).
   - 🧾 **Uitgaven & Kosten**: Bereken de totale cumulatieve kosten van abonnementen/vaste gewoontes over tijd (zonder rente).
-- **Realtime Berekening**: Voer een bedrag in en het hele dashboard past zich direct aan.
+- **Target Calculator (Spaardoel)**: Voer je gewenste eindbedrag en spaartermijn in om direct te berekenen hoeveel je periodiek (per week, maand, kwartaal of jaar) opzij moet zetten.
+- **Aangepaste Realtime Berekening**: Reken in realtime een eigen specifiek bedrag, inlegfrequentie en exact aantal jaren of maanden uit.
 - **Samengestelde Rente (Compound Interest)**: Standaard ingesteld op 3,0% per jaar (maandelijks samengesteld conform financiële standaarden).
 - **Flexibele Rente Slider**: Pas het verwachte rendement eenvoudig aan tussen **0% en 10%**.
 - **4 Spaarfrequenties**: Vergelijk bedragen op **Wekelijkse**, **Maandelijkse**, **Per Kwartaal** en **Jaarlijkse** basis.
-- **12 Tijdsperiodes**: Van kort (1 week, 1 maand, 3/6 maanden, 1/2/5 jaar) tot langetermijn (10, 15, 20, 30 en maximaal 50 jaar).
+- **Uitgebreide Tijdsperiodes**: Inclusief 1w, 1m, 3m, 6m, 1j, 2j, 5j, 10j, 15j, 20j, 25j, 30j, 35j, 45j en maximaal 50j.
 - **Lange Termijn Highlights**: Accentkaarten voor de mijlpalen van 20, 30 en 50 jaar met het % rendementsbonus t.o.v. de eigen inleg.
 - **Interactieve Recharts Grafiek**: Visuele representatie van eigen inleg versus opgebouwde samengestelde rente over tijd.
-- **Matrix Tabel**: Compleet overzicht van alle termijnen x frequenties met filters voor Totale Waarde, Rente of Inleg.
+- **Matrix Tabel**: Compleet overzicht van alle termijnen x frequenties met filters voor Totale Waarde, Rente of Inleg en strak uitgelijnde cel-borders.
 - **Bank-Style UI**: Strak, professioneel, minimalistisch design met rustige typografie en bank-blauwe accenten.
 - **100% Offline & Veilig**: Pure client-side applicatie zonder externe database of server calls.
 
