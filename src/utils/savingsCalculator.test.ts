@@ -47,3 +47,33 @@ describe('Savings Calculator Utility - Exact Deposit Timing with Monthly Compoun
     expect(all.chartData.length).toBe(13);
   });
 });
+
+describe('Startkapitaal (Initial Deposit) Functionality Tests', () => {
+  it('correctly attributes initial deposit: €1000 initial + €0 periodic over 10y at 3% interest', () => {
+    const result = calculateProjection(0, 'monthly', 10, 3, 'savings', 1000);
+    // Total deposit must be €1.000 (NOT €0)
+    expect(result.totalDeposit).toBe(1000);
+    // 1000 * (1.0025)^120 = 1349.35
+    expect(result.totalValue).toBeCloseTo(1349.35, 2);
+    // Opgebouwde rente must be ONLY the interest gain: 1349.35 - 1000 = 349.35 (NOT 1349.35)
+    expect(result.totalInterest).toBeCloseTo(349.35, 2);
+  });
+
+  it('correctly calculates initial deposit combined with periodic deposit: €5000 initial + €100/mo over 5y at 3%', () => {
+    const result = calculateProjection(100, 'monthly', 5, 3, 'savings', 5000);
+    // 5000 initial + (100 * 60) periodic = 11.000 total deposit
+    expect(result.totalDeposit).toBe(11000);
+    expect(result.totalValue).toBeGreaterThan(11000);
+    expect(result.totalInterest).toBe(Math.round((result.totalValue - 11000) * 100) / 100);
+  });
+
+  it('verifies calculateRequiredDeposit reduces required deposit when initial deposit is present', () => {
+    // Target €10.000 over 5 years at 3% interest WITHOUT initial deposit
+    const withoutInitial = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 0);
+    // Target €10.000 over 5 years at 3% interest WITH €2.000 initial deposit
+    const withInitial = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 2000);
+
+    expect(withInitial.requiredDeposit).toBeLessThan(withoutInitial.requiredDeposit);
+    expect(withInitial.totalDeposit).toBeGreaterThanOrEqual(2000);
+  });
+});
