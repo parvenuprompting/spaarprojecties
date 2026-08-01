@@ -9,7 +9,7 @@
 
 Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente én cumulatieve uitgavenberekening.
 
-![Spaarprojecties Overview](https://raw.githubusercontent.com/parvenuprompting/spaarprojecties/main/public/banner.png)
+![Spaarprojecties Overview](./public/banner.png)
 
 ## 🚀 Kenmerken
 
