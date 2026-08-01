@@ -815,10 +815,15 @@ body {
 .bank-table td {
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--bank-border);
+  vertical-align: middle;
 }
 
 .td-timeframe {
-  display: flex;
+  vertical-align: middle;
+}
+
+.td-timeframe-content {
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -827,7 +832,7 @@ body {
   font-size: 0.675rem;
   font-weight: 700;
   color: #b45309;
-  background-color: #fffbeeb;
+  background-color: #fef3c7;
   border: 1px solid #fde68a;
   padding: 0.1rem 0.4rem;
   border-radius: 0.25rem;

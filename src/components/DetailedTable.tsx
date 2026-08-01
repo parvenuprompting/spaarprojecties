@@ -89,10 +89,12 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
                   className={`table-row ${isHighlightYear ? 'row-highlight' : ''}`}
                 >
                   <td className="td-timeframe">
-                    <span className="font-semibold text-slate-800">{tf.label}</span>
-                    {isHighlightYear && (
-                      <span className="pill-star">★ Major Milestone</span>
-                    )}
+                    <div className="td-timeframe-content">
+                      <span className="font-semibold text-slate-800">{tf.label}</span>
+                      {isHighlightYear && (
+                        <span className="pill-star">★ Major Milestone</span>
+                      )}
+                    </div>
                   </td>
 
                   {FREQUENCIES.map((freq) => {
