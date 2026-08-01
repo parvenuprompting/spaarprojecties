@@ -63,11 +63,11 @@ export function calculateProjection(
     };
   }
 
+  // Monthly compounding rate (strictly monthlyRate = annualRatePct / 100 / 12)
   const monthlyRate = cleanRate / 100 / 12;
   const totalMonths = Math.max(1, Math.round(years * 12));
 
   let currentBalance = 0;
-  const depositsPerMonth = periodsPerYear / 12;
 
   if (years < 1 / 12) {
     const depositCount = Math.max(1, Math.round(years * periodsPerYear));
@@ -83,7 +83,19 @@ export function calculateProjection(
   }
 
   for (let m = 1; m <= totalMonths; m++) {
-    currentBalance += cleanAmount * depositsPerMonth;
+    let depositsThisMonth = 0;
+    if (frequency === 'monthly') {
+      depositsThisMonth = 1;
+    } else if (frequency === 'quarterly') {
+      depositsThisMonth = m % 3 === 0 ? 1 : 0;
+    } else if (frequency === 'yearly') {
+      depositsThisMonth = m % 12 === 0 ? 1 : 0;
+    } else if (frequency === 'weekly') {
+      // Discrete week deposits falling into month m (summing to 52 per year)
+      depositsThisMonth = Math.round(m * (52 / 12)) - Math.round((m - 1) * (52 / 12));
+    }
+
+    currentBalance += cleanAmount * depositsThisMonth;
     currentBalance += currentBalance * monthlyRate;
   }
 
@@ -199,16 +211,23 @@ export function calculateRequiredDeposit(
     };
   }
 
-  // Monthly compounding factor calculation
-  // Find payment x such that compounding monthly gives targetAmount
   const monthlyRate = cleanRate / 100 / 12;
   const totalMonths = Math.max(1, Math.round(years * 12));
-  const depositsPerMonth = periodsPerYear / 12;
 
-  // Let FV_1 be future value when x = 1
   let fvUnit = 0;
   for (let m = 1; m <= totalMonths; m++) {
-    fvUnit += 1 * depositsPerMonth;
+    let depositsThisMonth = 0;
+    if (frequency === 'monthly') {
+      depositsThisMonth = 1;
+    } else if (frequency === 'quarterly') {
+      depositsThisMonth = m % 3 === 0 ? 1 : 0;
+    } else if (frequency === 'yearly') {
+      depositsThisMonth = m % 12 === 0 ? 1 : 0;
+    } else if (frequency === 'weekly') {
+      depositsThisMonth = Math.round(m * (52 / 12)) - Math.round((m - 1) * (52 / 12));
+    }
+
+    fvUnit += 1 * depositsThisMonth;
     fvUnit += fvUnit * monthlyRate;
   }
 

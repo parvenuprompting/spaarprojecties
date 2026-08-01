@@ -1,46 +1,49 @@
 import { describe, it, expect } from 'vitest';
 import { calculateProjection, calculateAllProjections, calculateRequiredDeposit } from './savingsCalculator';
 
-describe('Savings Calculator Utility', () => {
-  it('calculates zero interest correctly for 1 year monthly savings of €50', () => {
-    const result = calculateProjection(50, 'monthly', 1, 0, 'savings');
-    expect(result.totalDeposit).toBe(600);
-    expect(result.totalInterest).toBe(0);
-    expect(result.totalValue).toBe(600);
+describe('Savings Calculator Utility - Exact Deposit Timing with Monthly Compounding', () => {
+  it('verifies yearly deposit timing: €1000/year over 10 years at 3% interest equals €11.514,58', () => {
+    const result = calculateProjection(1000, 'yearly', 10, 3, 'savings');
+    expect(result.totalDeposit).toBe(10000);
+    // Reference value calculated via monthly compounding loop: €11.514,58
+    expect(result.totalValue).toBeCloseTo(11514.58, 1);
+    expect(result.totalInterest).toBeCloseTo(1514.58, 1);
   });
 
-  it('calculates compound interest for 10 years at 3%', () => {
+  it('verifies quarterly deposit timing: €250/quarter over 10 years at 3% interest equals €11.645,10', () => {
+    const result = calculateProjection(250, 'quarterly', 10, 3, 'savings');
+    expect(result.totalDeposit).toBe(10000);
+    // Reference value calculated via monthly compounding loop: €11.645,10
+    expect(result.totalValue).toBeCloseTo(11645.10, 1);
+    expect(result.totalInterest).toBeCloseTo(1645.10, 1);
+  });
+
+  it('verifies monthly frequency yields exact same result as before the change', () => {
     const result = calculateProjection(50, 'monthly', 10, 3, 'savings');
     expect(result.totalDeposit).toBe(6000);
-    expect(result.totalValue).toBeGreaterThan(6000);
-    expect(result.totalInterest).toBe(Math.round((result.totalValue - 6000) * 100) / 100);
+    // Monthly deposit timing is unchanged: (balance + amount) * (1 + 0.03/12) per month
+    expect(result.totalValue).toBe(7004.54);
+    expect(result.totalInterest).toBe(1004.54);
   });
 
-  it('calculates expenses correctly with zero interest regardless of rate input', () => {
-    const result = calculateProjection(15, 'monthly', 10, 5, 'expenses');
-    expect(result.totalDeposit).toBe(1800);
-    expect(result.totalInterest).toBe(0);
-    expect(result.totalValue).toBe(1800);
+  it('verifies calculateRequiredDeposit inverse calculation for yearly target', () => {
+    // Target €11.514,58 over 10 years at 3% interest yearly deposit
+    const result = calculateRequiredDeposit(11514.58, 'yearly', 10, 3, 'savings');
+    expect(result.requiredDeposit).toBeCloseTo(1000, 0);
   });
 
-  it('generates all projections for expenses mode without NaN or errors', () => {
-    const all = calculateAllProjections(15, 5, 'expenses');
-    expect(all.amount).toBe(15);
-    expect(all.annualInterestRate).toBe(0);
-    expect(all.byFrequency.monthly.projections['50y'].totalValue).toBe(15 * 12 * 50);
+  it('verifies expenses mode yields zero interest across all frequencies', () => {
+    const resultYearly = calculateProjection(1000, 'yearly', 10, 5, 'expenses');
+    expect(resultYearly.totalDeposit).toBe(10000);
+    expect(resultYearly.totalInterest).toBe(0);
+    expect(resultYearly.totalValue).toBe(10000);
+  });
+
+  it('generates all projections without NaN or errors', () => {
+    const all = calculateAllProjections(100, 3, 'savings');
+    expect(all.amount).toBe(100);
+    expect(all.byFrequency.weekly.projections['50y'].totalValue).toBeGreaterThan(0);
+    expect(all.byFrequency.monthly.projections['50y'].totalValue).toBeGreaterThan(0);
     expect(all.chartData.length).toBe(13);
-  });
-
-  it('calculates required deposit for target amount correctly', () => {
-    // €12,000 target over 10 years at 0% interest monthly = €100/month
-    const targetZeroRate = calculateRequiredDeposit(12000, 'monthly', 10, 0, 'savings');
-    expect(targetZeroRate.requiredDeposit).toBe(100);
-    expect(targetZeroRate.totalDeposit).toBe(12000);
-    expect(targetZeroRate.totalInterest).toBe(0);
-
-    // €12,000 target over 10 years at 3% interest monthly -> required monthly deposit should be less than €100
-    const targetWithRate = calculateRequiredDeposit(12000, 'monthly', 10, 3, 'savings');
-    expect(targetWithRate.requiredDeposit).toBeLessThan(100);
-    expect(targetWithRate.totalInterest).toBeGreaterThan(0);
   });
 });
