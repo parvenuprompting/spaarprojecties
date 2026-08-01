@@ -10,7 +10,6 @@ import { CustomCalculator } from './components/CustomCalculator';
 import { TargetCalculator } from './components/TargetCalculator';
 import type { Frequency, CalculatorMode } from './types/savings';
 import { calculateAllProjections } from './utils/savingsCalculator';
-import { Info } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'spaarprojecties_user_state_v1';
 
@@ -185,16 +184,13 @@ export const App: React.FC = () => {
       </div>
 
       {/* Disclaimers & Footer */}
-      <footer className="w-full border-t border-slate-200 bg-white py-6 mt-12">
-        <div className="max-w-6xl mx-auto px-4 text-slate-500 text-xs flex flex-col gap-2">
-          <div className="flex items-start gap-2 text-slate-600">
-            <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-            <p>
-              <strong>Disclaimers & Informatie:</strong> Alle weergegeven bedragen en projecties zijn <em>nominaal</em> en niet gecorrigeerd voor inflatie of eventuele vermogensrendementsheffing (Box 3 belasting). Deze tool is uitsluitend bedoeld voor indicatieve en educatieve doeleinden en vormt geen financieel advies.
-            </p>
-          </div>
-          <p className="text-center text-slate-400 pt-3 border-t border-slate-100">
-            © {new Date().getFullYear()} SpaarProjecties — Pure Client-side React & TypeScript App (100% Privacy & Geen Tracking).
+      <footer className="w-full border-t border-slate-200/80 bg-slate-100/40 py-6 mt-16 text-slate-400 text-xs">
+        <div className="max-w-4xl mx-auto px-4 text-center flex flex-col gap-2">
+          <p className="leading-relaxed text-slate-500/90">
+            <span className="font-semibold text-slate-600">Disclaimer:</span> Alle bedragen en projecties zijn <em>nominaal</em> (niet gecorrigeerd voor inflatie of eventuele Box 3 heffing). Uitsluitend voor educatieve en indicatieve doeleinden.
+          </p>
+          <p className="text-[11px] text-slate-400">
+            © {new Date().getFullYear()} SpaarProjecties • Pure Client-Side App (100% Privacy & Geen Tracking)
           </p>
         </div>
       </footer>
