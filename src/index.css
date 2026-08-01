@@ -1247,4 +1247,36 @@ body {
   color: var(--bank-text-muted);
 }
 
+/* Footer Disclaimer */
+.app-footer {
+  width: 100%;
+  padding: 2rem 1rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--bank-border);
+  background-color: transparent;
+}
+
+.app-footer-content {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.725rem;
+  color: var(--bank-text-muted);
+  line-height: 1.5;
+}
+
+.app-footer-content p {
+  margin: 0;
+  text-align: center;
+}
+
+.app-footer-copy {
+  font-size: 0.675rem;
+  opacity: 0.75;
+}
+
 

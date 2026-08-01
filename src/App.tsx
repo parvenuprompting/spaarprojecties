@@ -184,12 +184,12 @@ export const App: React.FC = () => {
       </div>
 
       {/* Disclaimers & Footer */}
-      <footer className="w-full py-8 mt-16 border-t border-slate-200/60">
-        <div className="max-w-2xl mx-auto px-4 text-center flex flex-col gap-1.5 text-[11px] text-slate-400">
-          <p className="leading-relaxed">
-            <span className="font-semibold text-slate-500">Disclaimer:</span> Alle bedragen en projecties zijn nominaal (niet gecorrigeerd voor inflatie of Box 3 heffing). Uitsluitend bedoeld voor educatieve en indicatieve doeleinden.
+      <footer className="app-footer">
+        <div className="app-footer-content">
+          <p>
+            <strong>Disclaimer:</strong> Alle bedragen en projecties zijn nominaal (niet gecorrigeerd voor inflatie of Box 3 heffing). Uitsluitend bedoeld voor educatieve en indicatieve doeleinden.
           </p>
-          <p className="text-[10px] text-slate-400/80">
+          <p className="app-footer-copy">
             © {new Date().getFullYear()} SpaarProjecties • Pure Client-Side App (100% Privacy & Geen Tracking)
           </p>
         </div>
