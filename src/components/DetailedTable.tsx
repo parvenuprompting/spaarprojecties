@@ -81,7 +81,7 @@ export const DetailedTable: React.FC<DetailedTableProps> = ({
           </thead>
           <tbody>
             {TIMEFRAMES.map((tf) => {
-              const isHighlightYear = ['20y', '30y', '50y'].includes(tf.id);
+              const isHighlightYear = ['20y', '25y', '30y', '35y', '45y', '50y'].includes(tf.id);
 
               return (
                 <tr

@@ -19,7 +19,10 @@ export type TimeframeId =
   | '10y'
   | '15y'
   | '20y'
+  | '25y'
   | '30y'
+  | '35y'
+  | '45y'
   | '50y';
 
 export interface TimeframeOption {

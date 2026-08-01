@@ -6,6 +6,7 @@ import { HighlightCards } from './components/HighlightCards';
 import { FrequencyComparison } from './components/FrequencyComparison';
 import { ProjectionChart } from './components/ProjectionChart';
 import { DetailedTable } from './components/DetailedTable';
+import { CustomCalculator } from './components/CustomCalculator';
 import type { Frequency, CalculatorMode } from './types/savings';
 import { calculateAllProjections } from './utils/savingsCalculator';
 
@@ -70,13 +71,16 @@ export const App: React.FC = () => {
           mode={mode}
         />
 
-        {/* Step 5: Full 12-timeframe matrix table */}
+        {/* Step 5: Full timeframe matrix table */}
         <DetailedTable
           projections={projections}
           selectedFrequency={selectedFrequency}
           onSelectFrequency={setSelectedFrequency}
           mode={mode}
         />
+
+        {/* Step 6: Custom Realtime Calculator */}
+        <CustomCalculator mode={mode} annualInterestRate={interestRate} />
       </main>
     </div>
   );

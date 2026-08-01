@@ -28,7 +28,10 @@ export const TIMEFRAMES: TimeframeOption[] = [
   { id: '10y', label: '10 jaar', years: 10 },
   { id: '15y', label: '15 jaar', years: 15 },
   { id: '20y', label: '20 jaar', years: 20 },
+  { id: '25y', label: '25 jaar', years: 25 },
   { id: '30y', label: '30 jaar', years: 30 },
+  { id: '35y', label: '35 jaar', years: 35 },
+  { id: '45y', label: '45 jaar', years: 45 },
   { id: '50y', label: '50 jaar', years: 50 },
 ];
 

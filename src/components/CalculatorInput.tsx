@@ -1,5 +1,5 @@
 import React from 'react';
-import { Euro, Percent, Sparkles, CreditCard } from 'lucide-react';
+import { Euro, Percent, CreditCard } from 'lucide-react';
 import type { Frequency, CalculatorMode } from '../types/savings';
 import { FREQUENCIES } from '../utils/savingsCalculator';
 
@@ -124,11 +124,6 @@ export const CalculatorInput: React.FC<CalculatorInputProps> = ({
               </label>
               <div className="rate-badge">
                 <span>{interestRate}% per jaar</span>
-                {interestRate === 3 && (
-                  <span className="tag-std">
-                    <Sparkles className="w-3 h-3 text-amber-500" /> Standaard
-                  </span>
-                )}
               </div>
             </div>
 
