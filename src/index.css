@@ -10,6 +10,10 @@
   --bank-emerald: #059669;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -23,7 +27,7 @@ body {
 .bank-header {
   background-color: #ffffff;
   border-bottom: 1px solid var(--bank-border);
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.5rem;
   position: sticky;
   top: 0;
   z-index: 40;
@@ -36,6 +40,33 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bank-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--bank-text-muted);
+  text-decoration: none;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: #f1f5f9;
+  color: var(--bank-navy);
 }
 
 .bank-logo-group {

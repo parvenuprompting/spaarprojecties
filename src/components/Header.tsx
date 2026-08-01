@@ -1,7 +1,17 @@
 import React from 'react';
-import { PiggyBank } from 'lucide-react';
+import { PiggyBank, Sliders, Trophy, ArrowLeftRight, LineChart, Table, Calculator, Target } from 'lucide-react';
 
 export const Header: React.FC = () => {
+  const navItems = [
+    { label: 'Invoer & Rente', href: '#invoer', icon: Sliders },
+    { label: 'Highlights', href: '#highlights', icon: Trophy },
+    { label: 'Vergelijking', href: '#vergelijking', icon: ArrowLeftRight },
+    { label: 'Grafiek', href: '#grafiek', icon: LineChart },
+    { label: 'Matrix Tabel', href: '#tabel', icon: Table },
+    { label: 'Aangepaste Calc', href: '#custom-calc', icon: Calculator },
+    { label: 'Spaardoel', href: '#spaardoel', icon: Target },
+  ];
+
   return (
     <header className="bank-header">
       <div className="bank-header-container">
@@ -16,6 +26,19 @@ export const Header: React.FC = () => {
             </p>
           </div>
         </div>
+
+        {/* Navigation Menu */}
+        <nav className="bank-nav-menu">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a key={item.href} href={item.href} className="nav-link">
+                <Icon className="w-3.5 h-3.5" />
+                <span>{item.label}</span>
+              </a>
+            );
+          })}
+        </nav>
       </div>
     </header>
   );

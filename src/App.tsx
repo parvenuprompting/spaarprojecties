@@ -43,48 +43,62 @@ export const App: React.FC = () => {
         <ModeToggle mode={mode} onModeChange={handleModeChange} />
 
         {/* Step 1: Input controls */}
-        <CalculatorInput
-          amount={amount}
-          onAmountChange={setAmount}
-          interestRate={interestRate}
-          onInterestRateChange={setInterestRate}
-          selectedFrequency={selectedFrequency}
-          onFrequencyChange={setSelectedFrequency}
-          mode={mode}
-        />
+        <div id="invoer">
+          <CalculatorInput
+            amount={amount}
+            onAmountChange={setAmount}
+            interestRate={interestRate}
+            onInterestRateChange={setInterestRate}
+            selectedFrequency={selectedFrequency}
+            onFrequencyChange={setSelectedFrequency}
+            mode={mode}
+          />
+        </div>
 
         {/* Step 2: Milestone Highlight cards (20y / 30y / 50y max) */}
-        <HighlightCards projection={activeFrequencyProjection} mode={mode} />
+        <div id="highlights">
+          <HighlightCards projection={activeFrequencyProjection} mode={mode} />
+        </div>
 
         {/* Step 3: Frequency Comparison */}
-        <FrequencyComparison
-          projections={projections}
-          amount={amount}
-          selectedFrequency={selectedFrequency}
-          onSelectFrequency={setSelectedFrequency}
-          mode={mode}
-        />
+        <div id="vergelijking">
+          <FrequencyComparison
+            projections={projections}
+            amount={amount}
+            selectedFrequency={selectedFrequency}
+            onSelectFrequency={setSelectedFrequency}
+            mode={mode}
+          />
+        </div>
 
         {/* Step 4: Growth Chart */}
-        <ProjectionChart
-          projections={projections}
-          selectedFrequency={selectedFrequency}
-          mode={mode}
-        />
+        <div id="grafiek">
+          <ProjectionChart
+            projections={projections}
+            selectedFrequency={selectedFrequency}
+            mode={mode}
+          />
+        </div>
 
         {/* Step 5: Full timeframe matrix table */}
-        <DetailedTable
-          projections={projections}
-          selectedFrequency={selectedFrequency}
-          onSelectFrequency={setSelectedFrequency}
-          mode={mode}
-        />
+        <div id="tabel">
+          <DetailedTable
+            projections={projections}
+            selectedFrequency={selectedFrequency}
+            onSelectFrequency={setSelectedFrequency}
+            mode={mode}
+          />
+        </div>
 
         {/* Step 6: Custom Realtime Calculator */}
-        <CustomCalculator mode={mode} annualInterestRate={interestRate} />
+        <div id="custom-calc">
+          <CustomCalculator mode={mode} annualInterestRate={interestRate} />
+        </div>
 
         {/* Step 7: Spaardoel Target Calculator */}
-        <TargetCalculator mode={mode} annualInterestRate={interestRate} />
+        <div id="spaardoel">
+          <TargetCalculator mode={mode} annualInterestRate={interestRate} />
+        </div>
       </main>
     </div>
   );
