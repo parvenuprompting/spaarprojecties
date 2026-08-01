@@ -7,16 +7,19 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/parvenuprompting/spaarprojecties/pulls)
 
-Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente.
+Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente én cumulatieve uitgavenberekening.
 
-![Spaarprojecties Overview](https://raw.githubusercontent.com/parvenuprompting/spaarprojecties/main/public/og-preview.png)
+![Spaarprojecties Overview](https://raw.githubusercontent.com/parvenuprompting/spaarprojecties/main/public/banner.png)
 
 ## 🚀 Kenmerken
 
-- **Realtime Berekening**: Voer een periodiek spaarbedrag in en zie het dashboard direct bijwerken.
+- **Dual Modus (Sparen vs. Uitgaven)**:
+  - 💰 **Sparen & Investeren**: Met maandelijks samengestelde rente (rendement).
+  - 🧾 **Uitgaven & Kosten**: Bereken de totale cumulatieve kosten van abonnementen/vaste gewoontes over tijd (zonder rente).
+- **Realtime Berekening**: Voer een bedrag in en het hele dashboard past zich direct aan.
 - **Samengestelde Rente (Compound Interest)**: Standaard ingesteld op 3,0% per jaar (maandelijks samengesteld conform financiële standaarden).
-- **Flexibele Rente Slider**: Pas de verwachte rente/rendement eenvoudig aan tussen **0% en 10%**.
-- **4 Spaarfrequenties**: Vergelijk sparen op **Wekelijkse**, **Maandelijkse**, **Per Kwartaal** en **Jaarlijkse** basis.
+- **Flexibele Rente Slider**: Pas het verwachte rendement eenvoudig aan tussen **0% en 10%**.
+- **4 Spaarfrequenties**: Vergelijk bedragen op **Wekelijkse**, **Maandelijkse**, **Per Kwartaal** en **Jaarlijkse** basis.
 - **12 Tijdsperiodes**: Van kort (1 week, 1 maand, 3/6 maanden, 1/2/5 jaar) tot langetermijn (10, 15, 20, 30 en maximaal 50 jaar).
 - **Lange Termijn Highlights**: Accentkaarten voor de mijlpalen van 20, 30 en 50 jaar met het % rendementsbonus t.o.v. de eigen inleg.
 - **Interactieve Recharts Grafiek**: Visuele representatie van eigen inleg versus opgebouwde samengestelde rente over tijd.
