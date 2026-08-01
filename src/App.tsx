@@ -167,7 +167,6 @@ export const App: React.FC = () => {
               mode={mode}
               annualInterestRate={interestRate}
               globalFrequency={selectedFrequency}
-              onFrequencyChange={setSelectedFrequency}
               initialDeposit={initialDeposit}
             />
           </div>

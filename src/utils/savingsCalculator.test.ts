@@ -67,13 +67,17 @@ describe('Startkapitaal (Initial Deposit) Functionality Tests', () => {
     expect(result.totalInterest).toBe(Math.round((result.totalValue - 11000) * 100) / 100);
   });
 
-  it('verifies calculateRequiredDeposit reduces required deposit when initial deposit is present', () => {
-    // Target €10.000 over 5 years at 3% interest WITHOUT initial deposit
-    const withoutInitial = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 0);
-    // Target €10.000 over 5 years at 3% interest WITH €2.000 initial deposit
-    const withInitial = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 2000);
+  it('calculates exact required deposit values without initial deposit (target 10000, 5y, 3%)', () => {
+    const result = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 0);
+    expect(result.requiredDeposit).toBeCloseTo(154.30, 2);
+    expect(result.totalDeposit).toBeCloseTo(9258.07, 2);
+    expect(result.totalInterest).toBeCloseTo(741.93, 2);
+  });
 
-    expect(withInitial.requiredDeposit).toBeLessThan(withoutInitial.requiredDeposit);
-    expect(withInitial.totalDeposit).toBeGreaterThanOrEqual(2000);
+  it('calculates exact required deposit values with €2000 initial deposit (target 10000, 5y, 3%)', () => {
+    const result = calculateRequiredDeposit(10000, 'monthly', 5, 3, 'savings', 2000);
+    expect(result.requiredDeposit).toBeCloseTo(118.45, 2);
+    expect(result.totalDeposit).toBeCloseTo(9107.20, 2);
+    expect(result.totalInterest).toBeCloseTo(892.80, 2);
   });
 });

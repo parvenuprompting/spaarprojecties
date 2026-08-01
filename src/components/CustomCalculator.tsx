@@ -7,7 +7,6 @@ interface CustomCalculatorProps {
   mode: CalculatorMode;
   annualInterestRate: number;
   globalFrequency: Frequency;
-  onFrequencyChange: (freq: Frequency) => void;
   initialDeposit?: number;
 }
 
@@ -15,7 +14,6 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
   mode,
   annualInterestRate,
   globalFrequency,
-  onFrequencyChange,
   initialDeposit = 0,
 }) => {
   const [customAmount, setCustomAmount] = useState<number>(100);
@@ -29,8 +27,7 @@ export const CustomCalculator: React.FC<CustomCalculatorProps> = ({
   }, [globalFrequency]);
 
   const handleFrequencySelect = (freq: Frequency) => {
-    setCustomFrequency(freq);
-    onFrequencyChange(freq);
+    setCustomFrequency(freq); // uitsluitend lokaal — beïnvloedt de rest van de pagina niet
   };
 
   const isSavings = mode === 'savings';
