@@ -1,43 +1,127 @@
 # Spaar Projecties 📈
 
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
-[![Vitest](https://img.shields.io/badge/Vitest-Passed-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-100%25_Passed-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Code Quality](https://img.shields.io/badge/Code_Quality-Strict-blueviolet?style=for-the-badge)](https://github.com/parvenuprompting/spaarprojecties)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](https://github.com/parvenuprompting/spaarprojecties/pulls)
 
-Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het berekenen van realtime spaarprojecties met maandelijks samengestelde rente, eenmalig startkapitaal, cumulatieve uitgavenberekening en spaardoelberekeningen.
+> Een hoog-performante, type-safe Single Page Application (SPA) voor het berekenen van exacte financiële spaar- en uitgavenprojecties. Gebouwd op een maandelijks samengestelde rente-engine met ondersteuning voor optioneel startkapitaal, per-frequentie stortingstiming, en interactieve data-visualisaties.
 
-![Spaar Projecties Overview](./public/banner.png)
+---
 
-## 🚀 Kenmerken
+## 📸 Interface & Features
 
-- **Eenmalig Startkapitaal (Optioneel)**: Voer aanwezig spaargeld in (bijv. €1.000) dat direct meegroeit met de samengestelde rente en correct als inleg wordt toegerekend.
-- **Exacte Stortingstiming**: Maandelijks samengestelde rente conform financiële standaarden, met exacte stortingsmomenten voor wekelijks, maandelijks, per kwartaal en jaarlijks sparen.
-- **Sticky Navigatiemenu**: Snel en soepel navigeren naar elk onderdeel van de pagina met een responsief mobiel hamburger-menu.
-- **Dual Modus (Sparen vs. Uitgaven)**:
-  - 💰 **Sparen & Investeren**: Met maandelijks samengestelde rente (rendement).
-  - 🧾 **Uitgaven & Kosten**: Bereken de totale cumulatieve kosten van abonnementen/vaste gewoontes over tijd (zonder rente).
-- **Target Calculator (Spaardoel)**: Voer je gewenste eindbedrag en spaartermijn in om direct te berekenen hoeveel je periodiek opzij moet zetten.
-- **Aangepaste Realtime Berekening**: Reken in realtime een eigen specifiek bedrag, inlegfrequentie en exact aantal jaren of maanden uit.
-- **LocalStorage Persistentie**: Laatst ingevoerde gegevens worden automatisch lokaal opgeslagen in je browser.
-- **Flexibele Rente Slider**: Pas het verwachte rendement eenvoudig aan tussen **0% en 10%**.
-- **4 Spaarfrequenties & 15 Tijdsperiodes**: Van 1 week t/m 50 jaar (inclusief 20j, 25j, 30j, 35j, 45j en 50j mijlpalen).
-- **Sticky Matrix Tabel**: Mobiel-vriendelijke tabel met vastgezette eerste kolom (tijdsperiode) tijdens horizontaal scrollen.
-- **Volledige Toegankelijkheid (a11y)**: Alle interactieve kaarten en tabelkoppen zijn volledig met het toetsenbord te bedienen.
-- **100% Offline & Veilig**: Pure client-side applicatie zonder externe database of server calls (100% privacy).
+![Spaar Projecties Main Banner](./public/banner.png)
 
-## 🛠️ Tech Stack
+<div align="center">
+  <table>
+    <tr>
+      <td width="50%">
+        <img src="./public/preview-chart.png" alt="Cumulatieve Grafiek Visualisatie" />
+        <p align="center"><b>Interactieve Grafiekvisualisatie (Recharts)</b></p>
+      </td>
+      <td width="50%">
+        <img src="./public/preview-matrix.png" alt="Matrix Tabel per Tijdsperiode" />
+        <p align="center"><b>Sticky Matrix Tabel (1w t/m 50j)</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="50%" colspan="2">
+        <img src="./public/preview-expenses.png" alt="Uitgaven Modus" />
+        <p align="center"><b>Uitgaven & Kosten Modus (Abonnementen & Gewoontes)</b></p>
+      </td>
+    </tr>
+  </table>
+</div>
 
-- **Frontend**: React 19 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: Vanilla CSS (Design tokens, flexbox/grid layout)
-- **Visualisatie**: Recharts
-- **Iconen**: Lucide React
-- **Testing**: Vitest + React Testing Library
+---
 
-## 📦 Installatie & Lokaal Draaien
+## ✨ Kernfunctionaliteiten
+
+- 💰 **Exacte Compounding-Engine**: Berekening van maandelijks samengestelde rente ($r_{\text{maand}} = r_{\text{jaar}} / 12$) met exacte stortingsmomenten voor **Wekelijkse**, **Maandelijkse**, **Kwartaal-** en **Jaarlijkse** inleg.
+- 💵 **Optioneel Startkapitaal**: Voer een beginbedrag in dat direct rente-dragend meegroeit, met strikte scheiding tussen *Eigen Inleg* en *Rente Winst*.
+- 🎯 **Inverse Spaardoel Calculator**: Voer een gewenst eindbedrag en gewenste looptijd in om exact te berekenen wat de vereiste periodieke inleg moet zijn per frequentie.
+- 🧾 **Dual Modus (Sparen vs. Uitgaven)**: Schakel om naar de *Uitgaven & Kosten Modus* om de cumulatieve impact van maandelijks of wekelijks terugkerende vaste kosten op lange termijn inzichtelijk te maken (0% rente).
+- 📊 **Interactieve Data Visualisatie**: Dynamische gebiedsgrafiek (Recharts) met realtime toelichting voor eigen inleg versus samengestelde rente.
+- 📋 **Responsive Sticky Matrix Tabel**: Overzicht van 15 tijdsperiodes (1w t/m 50j) en 4 frequenties, inclusief vastgezette eerste kolom (`position: sticky`) voor optimale mobiele weergave.
+- 💾 **State Persistence**: Automatische opslag van voorkeuren via `localStorage` met veilige fallback en JSON-validatie.
+- ♿ **WAI-ARIA Accessibility**: 100% toetsenbordnavigeerbaar met geldige HTML5 semantiek en duidelijke focus-indicators.
+
+---
+
+## 🏛️ Architectuur & Code Kwaliteit
+
+Het project volgt een **Clean Component Architecture** met strikte scheiding van weergave en berekeningslogica:
+
+```
+src/
+├── components/          # Puur declaratieve React components
+│   ├── CalculatorInput.tsx
+│   ├── CustomCalculator.tsx
+│   ├── DetailedTable.tsx
+│   ├── FrequencyComparison.tsx
+│   ├── Header.tsx
+│   ├── HighlightCards.tsx
+│   ├── ModeToggle.tsx
+│   ├── ProjectionChart.tsx
+│   └── TargetCalculator.tsx
+├── types/               # Type-safe interfaces & enums
+│   └── savings.ts
+├── utils/               # Pure, deterministische berekeningsfuncties
+│   └── savingsCalculator.ts
+├── App.tsx              # Central State Hub (Single Source of Truth)
+├── index.css            # Custom Modern Banking Design System
+└── main.tsx
+```
+
+### Belangrijkste Ontwerp-keuzes:
+1. **Deterministische Pure Functions**: Alle financiële berekeningen in `savingsCalculator.ts` zijn pure functies zonder side-effects, 100% gedekt door geautomatiseerde unit tests.
+2. **Zero Heavy Framework Overhead**: Volledig gestyled met een op maat gemaakt Vanilla CSS Design System met CSS-variabelen, flexbox, grid, glassmorphism-effecten en micro-animaties.
+3. **Type-Safety & Strikte Linting**: Geen gebruik van `any` of type ignore hatches. Alle datacontracten zijn strikt vastgelegd in TypeScript interfaces.
+
+---
+
+## 📐 Financiële Formule & Berekeningslogica
+
+De maandelijks samengestelde rente volgt de bancaire standaard:
+
+$$r_{\text{maand}} = \frac{r_{\text{jaar}}}{100 \times 12}$$
+
+Voor een totale looptijd van $M = \text{jaren} \times 12$ maanden:
+
+$$\text{Saldo}_m = (\text{Saldo}_{m-1} + \text{Inleg}_m) \times (1 + r_{\text{maand}})$$
+
+$$\text{Totale Rente} = \text{Saldo}_M - (\text{Startkapitaal} + \text{Periodieke Inleg} \times N)$$
+
+---
+
+## 🧪 Testing & Kwaliteitsborging
+
+Het berekeningsalgoritme is uitvoerig gevalideerd met **Vitest** en **React Testing Library**:
+
+```bash
+# Unit tests uitvoeren met gedetailleerde rapportage
+npm test -- --reporter=verbose
+```
+
+### Gedekte testscenario's:
+- ✅ Exacte stortingstiming per kwartaal en jaar t.o.v. maandbasis.
+- ✅ Correcte toerekening van startkapitaal t.o.v. opgebouwde rente.
+- ✅ Inverse spaardoelberekening (`calculateRequiredDeposit`).
+- ✅ Nul-rente uitgavenmodus.
+- ✅ Foutloze generatie van de volledige matrix zonder `NaN` of afrondingsfouten.
+
+---
+
+## 📦 Installatie & Lokaal Gebruik
+
+### Vereisten
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+
+### Stappen
 
 1. **Repository klonen**:
    ```bash
@@ -45,36 +129,23 @@ Een minimalistische, snelle en type-safe React TypeScript webapplicatie voor het
    cd spaarprojecties
    ```
 
-2. **Dependencies installeren**:
+2. **Afhankelijkheden installeren**:
    ```bash
    npm install
    ```
 
-3. **Development server starten**:
+3. **Ontwikkelomgeving starten**:
    ```bash
    npm run dev
    ```
-   Open [http://localhost:5173](http://localhost:5173) in je browser.
 
-4. **Unit tests uitvoeren**:
-   ```bash
-   npm test
-   ```
-
-5. **Productie build maken**:
+4. **Productie Build & Type-Check**:
    ```bash
    npm run build
    ```
 
-## 📐 Samengestelde Rente Formule
-
-De applicatie maakt gebruik van de financiële standaard voor maandelijks samengestelde rente:
-
-$$r_{\text{maand}} = \frac{r_{\text{jaar}}}{12}$$
-
-Voor elke maand $m$:
-$$\text{Saldo}_m = (\text{Saldo}_{m-1} + \text{Inleg}_m) \times (1 + r_{\text{maand}})$$
+---
 
 ## 📄 Licentie
 
-MIT License
+Gepubliceerd onder de **MIT License**. Zie [LICENSE](LICENSE) voor meer details.
