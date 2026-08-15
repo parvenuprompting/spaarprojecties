@@ -102,13 +102,12 @@ export const App: React.FC = () => {
   const activeFrequencyProjection = projections.byFrequency[selectedFrequency];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
-      <div>
-        <Header />
+    <div className="app-root">
+      <Header />
 
-        <main className="app-container">
-          {/* Step 0: Mode Toggle (Sparen vs Uitgaven) */}
-          <ModeToggle mode={mode} onModeChange={handleModeChange} />
+      <main className="app-container">
+        {/* Step 0: Mode Toggle (Sparen vs Uitgaven) */}
+        <ModeToggle mode={mode} onModeChange={handleModeChange} />
 
           {/* Step 1: Input controls */}
           <div id="invoer">
@@ -181,7 +180,6 @@ export const App: React.FC = () => {
             />
           </div>
         </main>
-      </div>
 
       {/* Disclaimers & Footer */}
       <footer className="app-footer">
